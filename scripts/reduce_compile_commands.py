@@ -27,6 +27,11 @@ def main(argv: list[str] | None = None) -> None:
         action="store_true",
     )
     parser.add_argument(
+        "--root-only",
+        help="Only include files directly in the project root (no subdirectories)",
+        action="store_true",
+    )
+    parser.add_argument(
         "--exclude_dirs",
         help="Exclude files in any of the listed directories (relative to the project root)",
         nargs="+",
@@ -42,6 +47,8 @@ def main(argv: list[str] | None = None) -> None:
     compile_commands_by_file = {}
     for compile_command in compile_commands:
         file: str = compile_command["file"]
+        if args.root_only and os.path.dirname(file) != _ROOT:
+            continue
         if any(file.startswith(d) for d in args.exclude_dirs):
             continue
         if file in compile_commands:

@@ -41,9 +41,9 @@ jobs:
 
       - name: clang-tidy
         run: |
-          python scripts/reduce_compile_commands.py build/compile_commands.json > compile_commands.json
+          python scripts/reduce_compile_commands.py build/compile_commands.json --root-only > compile_commands.json
           PROJECT_SOURCE_FILES="$(python scripts/reduce_compile_commands.py build/compile_commands.json \
               --names-only \
-              --exclude_dirs build exploration compile_checks benchmarks)"
+              --root-only)"
           echo $PROJECT_SOURCE_FILES \
             | xargs clang-tidy -warnings-as-errors="*" -p compile_commands.json
